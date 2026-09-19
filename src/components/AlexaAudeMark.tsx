@@ -7,28 +7,24 @@ interface AlexaAudeMarkProps {
 }
 
 /**
- * Refined AlexaAude AI Mark:
- * Combines voice wave dynamics, AI intelligence spark, and smart home connectivity.
+ * AlexaAude Mark — abstract symbol representing family connection + intelligence.
+ *
+ * Design concept: three nodes arranged in a constellation, connected by lines,
+ * with a subtle radial center. Evokes people, relationships, and networked
+ * intelligence without referencing microphones, speakers, or voice UI.
  */
 export const AlexaAudeMark: React.FC<AlexaAudeMarkProps> = ({
   size = 'md',
   className = '',
-  variant = 'dark',
 }) => {
-  const pixelSizes = {
-    sm: 20,
-    md: 28,
-    lg: 36,
-    xl: 44,
-  };
-
+  const pixelSizes = { sm: 20, md: 28, lg: 36, xl: 44 };
   const dim = pixelSizes[size];
 
   return (
     <div
       className={`inline-flex items-center justify-center relative flex-shrink-0 select-none ${className}`}
       style={{ width: dim, height: dim }}
-      aria-label="AlexaAude AI Mark"
+      aria-label="AlexaAude"
     >
       <svg
         viewBox="0 0 36 36"
@@ -36,85 +32,50 @@ export const AlexaAudeMark: React.FC<AlexaAudeMarkProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
       >
-        <defs>
-          {/* Subtle acoustic gradient */}
-          <linearGradient id="alexaWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#38BDF8" />
-            <stop offset="50%" stopColor="#2563EB" />
-            <stop offset="100%" stopColor="#6366F1" />
-          </linearGradient>
+        {/* Dark rounded-square base */}
+        <rect x="1" y="1" width="34" height="34" rx="9" fill="#0F172A" />
 
-          {/* Core spark gradient */}
-          <radialGradient id="sparkGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#38BDF8" stopOpacity="1" />
-            <stop offset="100%" stopColor="#1E40AF" stopOpacity="0.8" />
-          </radialGradient>
-        </defs>
+        {/*
+          Constellation symbol:
+          - Three nodes: top-center, bottom-left, bottom-right
+          - Connection lines between them
+          - A small central node where the family converges
+        */}
 
-        {/* Base dark housing */}
-        <rect
-          x="1"
-          y="1"
-          width="34"
-          height="34"
-          rx="10"
-          fill="#0F172A"
-          stroke="#1E293B"
-          strokeWidth="1.2"
-        />
+        {/* Connection lines — rendered behind nodes */}
+        {/* Top to bottom-left */}
+        <line x1="18" y1="10" x2="11" y2="24" stroke="#334155" strokeWidth="1.4" strokeLinecap="round" />
+        {/* Top to bottom-right */}
+        <line x1="18" y1="10" x2="25" y2="24" stroke="#334155" strokeWidth="1.4" strokeLinecap="round" />
+        {/* Bottom-left to bottom-right */}
+        <line x1="11" y1="24" x2="25" y2="24" stroke="#334155" strokeWidth="1.4" strokeLinecap="round" />
+        {/* Center connections */}
+        <line x1="18" y1="10" x2="18" y2="19" stroke="#334155" strokeWidth="1" strokeLinecap="round" />
+        <line x1="11" y1="24" x2="18" y2="19" stroke="#334155" strokeWidth="1" strokeLinecap="round" />
+        <line x1="25" y1="24" x2="18" y2="19" stroke="#334155" strokeWidth="1" strokeLinecap="round" />
 
-        {/* Outer subtle orbital ring (Alexa voice-ring echo) */}
-        <circle
-          cx="18"
-          cy="18"
-          r="14"
-          stroke="url(#alexaWaveGrad)"
-          strokeWidth="1"
-          strokeDasharray="1.5 2.5"
-          opacity="0.55"
-        />
+        {/* Outer nodes — family members */}
+        <circle cx="18" cy="10" r="2.8" fill="#60A5FA" />
+        <circle cx="11" cy="24" r="2.8" fill="#818CF8" />
+        <circle cx="25" cy="24" r="2.8" fill="#34D399" />
 
-        {/* 4 Voice wave frequency bars */}
-        {/* Left bar (ambient) */}
-        <rect x="9" y="15" width="2.2" height="6" rx="1.1" fill="#38BDF8" opacity="0.85" />
-
-        {/* Mid-left bar (voice resonance) */}
-        <rect x="13.5" y="10.5" width="2.2" height="15" rx="1.1" fill="#60A5FA" />
-
-        {/* Mid-right bar (voice resonance) */}
-        <rect x="20.3" y="10.5" width="2.2" height="15" rx="1.1" fill="#60A5FA" />
-
-        {/* Right bar (ambient) */}
-        <rect x="24.8" y="15" width="2.2" height="6" rx="1.1" fill="#38BDF8" opacity="0.85" />
-
-        {/* Central 4-pointed AI intelligence spark */}
-        <path
-          d="M18 7 C18 12.5 12.5 18 7 18 C12.5 18 18 23.5 18 29 C18 23.5 23.5 18 29 18 C23.5 18 18 12.5 18 7 Z"
-          fill="url(#alexaWaveGrad)"
-          opacity="0.3"
-        />
-
-        {/* Sharp core micro spark */}
-        <path
-          d="M18 13.5 L19 17 L22.5 18 L19 19 L18 22.5 L17 19 L13.5 18 L17 17 Z"
-          fill="#E0F2FE"
-        />
-
-        {/* Home node dot at base */}
-        <circle cx="18" cy="28.5" r="1.2" fill="#38BDF8" />
+        {/* Central intelligence node */}
+        <circle cx="18" cy="19" r="2" fill="#F1F5F9" />
+        <circle cx="18" cy="19" r="1" fill="#0F172A" />
       </svg>
     </div>
   );
 };
 
+
 interface AiInsightTagProps {
   label?: string;
-  type?: 'insight' | 'smarthome' | 'family' | 'shopping' | 'travel' | 'treasury' | 'voice';
+  type?: 'insight' | 'smarthome' | 'family' | 'shopping' | 'travel' | 'treasury';
   className?: string;
 }
 
 /**
- * Standardized AI Visual Language Badge
+ * Standardized AI insight badge — minimal, no pulsing animations.
  */
 export const AiInsightTag: React.FC<AiInsightTagProps> = ({
   label,
@@ -123,50 +84,45 @@ export const AiInsightTag: React.FC<AiInsightTagProps> = ({
 }) => {
   const configs = {
     insight: {
-      defaultLabel: 'ALEXAAUDE AI INSIGHT',
-      bg: 'bg-slate-900 text-cyan-300 border-slate-800',
-      dot: 'bg-cyan-400',
+      defaultLabel: 'AI INSIGHT',
+      bg: 'bg-slate-900 text-slate-300 border-slate-700',
+      dot: 'bg-blue-400',
     },
     smarthome: {
-      defaultLabel: 'SMART HOME AI',
-      bg: 'bg-slate-900 text-blue-300 border-slate-800',
+      defaultLabel: 'SMART HOME',
+      bg: 'bg-slate-900 text-blue-300 border-slate-700',
       dot: 'bg-blue-400',
     },
     family: {
-      defaultLabel: 'FAMILY AI',
-      bg: 'bg-slate-900 text-indigo-300 border-slate-800',
+      defaultLabel: 'FAMILY',
+      bg: 'bg-slate-900 text-indigo-300 border-slate-700',
       dot: 'bg-indigo-400',
     },
     shopping: {
-      defaultLabel: 'SHOPPING PREDICTION AI',
-      bg: 'bg-slate-900 text-emerald-300 border-slate-800',
+      defaultLabel: 'SHOPPING',
+      bg: 'bg-slate-900 text-emerald-300 border-slate-700',
       dot: 'bg-emerald-400',
     },
     travel: {
-      defaultLabel: 'TRAVEL AI',
-      bg: 'bg-slate-900 text-amber-300 border-slate-800',
+      defaultLabel: 'TRAVEL',
+      bg: 'bg-slate-900 text-amber-300 border-slate-700',
       dot: 'bg-amber-400',
     },
     treasury: {
-      defaultLabel: 'TREASURY AI',
-      bg: 'bg-slate-900 text-purple-300 border-slate-800',
+      defaultLabel: 'TREASURY',
+      bg: 'bg-slate-900 text-purple-300 border-slate-700',
       dot: 'bg-purple-400',
-    },
-    voice: {
-      defaultLabel: 'VOICE INTELLIGENCE',
-      bg: 'bg-slate-900 text-sky-300 border-slate-800',
-      dot: 'bg-sky-400',
     },
   };
 
-  const current = configs[type] || configs.insight;
+  const current = configs[type] ?? configs.insight;
   const displayLabel = label || current.defaultLabel;
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold tracking-wider uppercase border ${current.bg} ${className}`}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold tracking-wider uppercase border ${current.bg} ${className}`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${current.dot} animate-pulse`} />
+      <span className={`h-1 w-1 rounded-full ${current.dot}`} />
       <span>{displayLabel}</span>
     </span>
   );
