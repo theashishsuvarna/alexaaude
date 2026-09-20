@@ -123,4 +123,4 @@ export class AwsFamilyAdapter {
   }
 }
 
-export const awsAdapter = new AwsFamilyAdapter();
+export const awsIntegration = new AwsFamilyAdapter();

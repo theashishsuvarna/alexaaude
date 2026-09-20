@@ -46,7 +46,7 @@ import { MorningBriefingModal } from './components/MorningBriefingModal';
 // Tab Views
 import { FamilyView } from './components/views/FamilyView';
 import { CalendarView } from './components/views/CalendarView';
-import { TasksView } from './components/views/TasksView';
+import { FamilyResponsibilitiesView } from './components/views/FamilyResponsibilitiesView';
 import { MoneyView } from './components/views/MoneyView';
 import { HomeView } from './components/views/HomeView';
 import { SmartDevicesView } from './components/views/SmartDevicesView';
@@ -321,7 +321,7 @@ export default function App() {
           )}
 
           {activeTab === 'tasks' && (
-            <TasksView
+            <FamilyResponsibilitiesView
               tasks={familyTasks}
               onToggleTask={(id) => {
                 setFamilyTasks((prev) =>

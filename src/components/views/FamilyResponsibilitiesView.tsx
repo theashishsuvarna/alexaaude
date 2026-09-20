@@ -35,14 +35,14 @@ export interface FamilyResponsibility {
   actionExecuted?: boolean;
 }
 
-interface TasksViewProps {
+interface FamilyResponsibilitiesViewProps {
   tasks?: FamilyTaskItem[];
   onToggleTask?: (taskId: string) => void;
   onAddTask?: (task: FamilyTaskItem) => void;
   onOpenAssistant?: (query?: string) => void;
 }
 
-export const TasksView: React.FC<TasksViewProps> = ({
+export const FamilyResponsibilitiesView: React.FC<FamilyResponsibilitiesViewProps> = ({
   onOpenAssistant,
 }) => {
   const [responsibilities, setResponsibilities] = useState<FamilyResponsibility[]>([
