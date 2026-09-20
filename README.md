@@ -1,20 +1,20 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# AlexaAude — AI Operating System for Family Life
 
-# Run and deploy your AI Studio app
+AlexaAude connects schedules, money, home, shopping, travel, documents, devices and family responsibilities into one shared family context.
 
-This contains everything you need to run your app locally.
+## Core loop
+Understand → Predict → Plan → Ask Permission → Execute
 
-View your app in AI Studio: https://ai.studio/apps/48ec6798-afa1-406f-824f-78b5af5b42ed
+## Demo
+This prototype uses fictional family data and simulated ecosystem actions for demonstration purposes.
 
-## Run Locally
+## Technology
+- React + TypeScript + Vite
+- Deterministic family decision engine
+- AWS-aligned local architecture
 
-**Prerequisites:**  Node.js
+## AI development tools
+AI coding/prototyping tools were used during development, including Kiro and Google AI Studio. Google Gemini is not a runtime dependency of the submitted application.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Disclaimer
+Fictional demo data only. Amazon ecosystem references are conceptual/simulated and do not represent access to Amazon customer data or private APIs.
