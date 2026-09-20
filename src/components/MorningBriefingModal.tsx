@@ -84,7 +84,7 @@ export const MorningBriefingModal: React.FC<MorningBriefingModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-slate-900">AlexaAude Morning Briefing</h3>
-                <AiInsightTag type="voice" label="VOICE SIMULATION" />
+                <AiInsightTag type="orchestrator" label="DAILY DIGEST" />
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 {householdProfile.familyName} · {householdProfile.homeCity}
@@ -99,7 +99,7 @@ export const MorningBriefingModal: React.FC<MorningBriefingModalProps> = ({
           </button>
         </div>
 
-        {/* Audio Waveform Indicator */}
+        {/* Executive Digest Controls */}
         <div className="my-5 p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
@@ -109,19 +109,22 @@ export const MorningBriefingModal: React.FC<MorningBriefingModalProps> = ({
               {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
             </button>
             <span className="text-xs text-slate-700 font-medium">
-              {isPlaying ? 'Synthesizing voice briefing...' : 'Paused'}
+              {isPlaying ? 'Stepping through household summary...' : 'Paused'}
             </span>
           </div>
 
-          {/* Minimal visual equalizer bars */}
-          <div className="flex items-center gap-1">
-            {[14, 22, 10, 26, 18, 24, 12].map((height, i) => (
+          {/* Clean Step Progress Indicator */}
+          <div className="flex items-center gap-1.5">
+            {briefingPoints.map((_, i) => (
               <span
                 key={i}
-                className={`w-1 rounded-full bg-blue-600 transition-all duration-300 ${
-                  isPlaying ? 'opacity-100' : 'opacity-30'
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === currentStep
+                    ? 'w-6 bg-slate-900'
+                    : i < currentStep
+                    ? 'w-2 bg-slate-400'
+                    : 'w-2 bg-slate-200'
                 }`}
-                style={{ height: isPlaying ? `${height}px` : '6px' }}
               />
             ))}
           </div>

@@ -55,6 +55,8 @@ import { TravelView } from './components/views/TravelView';
 import { DocumentsView } from './components/views/DocumentsView';
 import { LifeEventsView } from './components/views/LifeEventsView';
 import { SettingsModal } from './components/views/SettingsModal';
+import { FamilyDigitalTwinView } from './components/views/FamilyDigitalTwinView';
+import { ConnectedEcosystemView } from './components/views/ConnectedEcosystemView';
 
 // Landing Page & Auth Flow Components
 import { LandingPage } from './components/landing/LandingPage';
@@ -379,6 +381,19 @@ export default function App() {
           {activeTab === 'life-events' && (
             <LifeEventsView
               lifeEvents={lifeEvents}
+              onOpenAssistant={handleOpenAssistant}
+            />
+          )}
+
+          {activeTab === 'digital-twin' && (
+            <FamilyDigitalTwinView
+              onOpenAssistant={handleOpenAssistant}
+              onNavigateTab={setActiveTab}
+            />
+          )}
+
+          {activeTab === 'ecosystem' && (
+            <ConnectedEcosystemView
               onOpenAssistant={handleOpenAssistant}
             />
           )}

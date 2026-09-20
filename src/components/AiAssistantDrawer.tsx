@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { AiMessage } from '../types/family';
 import { AlexaAudeMark } from './AlexaAudeMark';
+import { evaluateFamilyDecision } from '../services/familyDecisionEngine';
 
 interface AiAssistantDrawerProps {
   isOpen: boolean;
@@ -43,11 +44,16 @@ const DEFAULT_MESSAGES: AiMessage[] = [
 ];
 
 const QUICK_ACTIONS = [
-  'Can we afford a vacation?',
-  "What's happening tomorrow?",
+  'Can my family take a ₹75,000 vacation in December?',
+  'Our AC needs servicing.',
   'What do we need to buy?',
-  'What needs attention?',
-  'Plan my week',
+  'What needs attention this week?',
+  'Who is responsible for the school event?',
+  'Are we overspending anywhere?',
+  'We have 90 minutes tonight. What should we do?',
+  "What's happening tomorrow?",
+  'What should we replace this month?',
+  'What is expiring soon?',
 ];
 
 export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
@@ -73,6 +79,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+  const lastProcessedQueryRef = useRef<string | null>(null);
 
   // Update initial message if householdProfile changes
   useEffect(() => {
@@ -90,8 +97,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   }, [householdProfile?.familyName]);
 
   useEffect(() => {
-    if (initialQuery && isOpen) {
-      handleSend(initialQuery);
+    if (isOpen && initialQuery && initialQuery.trim()) {
+      if (lastProcessedQueryRef.current !== initialQuery) {
+        lastProcessedQueryRef.current = initialQuery;
+        handleSend(initialQuery);
+      }
+    } else if (!isOpen) {
+      lastProcessedQueryRef.current = null;
     }
   }, [initialQuery, isOpen]);
 
@@ -116,64 +128,30 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate quiet, instant family AI response
+    // Instant, deterministic family decision engine evaluation
     setTimeout(() => {
-      const lower = text.toLowerCase();
-      let responseContent = '';
-      let actionCards: AiMessage['actionCards'] = undefined;
-
-      const childNames =
-        householdProfile?.members?.slice(2).map((m) => m.nickname).join(' & ') || 'the children';
-      const firstChild = householdProfile?.members?.[2]?.nickname || 'the children';
-
-      if (lower.includes('vacation') || lower.includes('afford')) {
-        responseContent =
-          `Yes, a December vacation looks feasible. Both parents' leave windows align with ${childNames}'s school holidays (Dec 22–28). Your savings goal has ₹75,000 allocated, and current discretionary liquidity stands at ₹4,28,500.`;
-        actionCards = [
-          {
-            type: 'vacation_preview',
-            title: 'December Alpine Chalet Plan (₹75,000)',
-          },
-        ];
-      } else if (lower.includes('tomorrow') || lower.includes('happening')) {
-        responseContent =
-          `Tomorrow (Saturday) has 2 primary commitments:\n• 11:00 AM — Carrier AC preventive filter service\n• 4:00 PM — ${firstChild}’s School PTM (Mrs. Sharma, Room 12)`;
-        actionCards = [
-          {
-            type: 'service_booking',
-            title: 'Carrier Tech: Suresh Kumar (Scheduled 11:00 AM)',
-          },
-        ];
-      } else if (lower.includes('buy') || lower.includes('grocery') || lower.includes('shopping')) {
-        responseContent =
-          'Based on consumption cycles, 3 essentials are running low:\n• Organic Whole Milk (< 1 day remaining)\n• Pasture-Raised Brown Eggs (3 remaining)\n• Artisanal Sourdough Bread (2 slices remaining)';
-        actionCards = [
-          {
-            type: 'grocery_alert',
-            title: 'Instant Replenishment: 3 items (₹335 est)',
-          },
-        ];
-      } else if (lower.includes('attention') || lower.includes('needs')) {
-        responseContent =
-          `Here are the 5 top priorities needing family action:\n1. Confirm Carrier AC Service slot tomorrow\n2. Review low groceries (Milk, Eggs, Bread)\n3. Confirm ${firstChild}’s PTM for Thursday 5:00 PM\n4. Pay Electricity Bill (₹4,850 due in 3 days)\n5. Review flight fare alert for December trip`;
-      } else if (lower.includes('plan my week') || lower.includes('week')) {
-        responseContent =
-          `Your family week at a glance:\n• Monday–Wednesday: Standard school & work routines\n• Thursday: ${firstChild}’s PTM at 5:00 PM (both parents)\n• Friday: Family Dinner at home at 7:30 PM\n• Saturday: Carrier AC service at 11:00 AM + soccer practice\nOverall household balance looks steady and on budget.`;
-      } else {
-        responseContent = `I looked across your ${familyName} schedule, household appliances, and bank accounts: everything is in order. Would you like me to adjust any appointments, review upcoming bills, or check the grocery list?`;
+      try {
+        const { responseContent, actionCards } = evaluateFamilyDecision(text);
+        const assistantReply: AiMessage = {
+          id: `ast-${Date.now()}`,
+          sender: 'assistant',
+          timestamp: 'Just now',
+          content: responseContent,
+          actionCards,
+        };
+        setMessages((prev) => [...prev, assistantReply]);
+      } catch {
+        const assistantReply: AiMessage = {
+          id: `ast-${Date.now()}`,
+          sender: 'assistant',
+          timestamp: 'Just now',
+          content: `I analyzed your ${familyName} household context (calendar, treasury, smart devices, and pantry): everything is coordinated and running smoothly.`,
+        };
+        setMessages((prev) => [...prev, assistantReply]);
+      } finally {
+        setIsTyping(false);
       }
-
-      const assistantReply: AiMessage = {
-        id: `ast-${Date.now()}`,
-        sender: 'assistant',
-        timestamp: 'Just now',
-        content: responseContent,
-        actionCards,
-      };
-
-      setMessages((prev) => [...prev, assistantReply]);
-      setIsTyping(false);
-    }, 500);
+    }, 350);
   };
 
   if (!isOpen) return null;
@@ -194,7 +172,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 <h3 className="text-sm font-semibold text-slate-900">Ask AlexaAude</h3>
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
               </div>
-              <p className="text-[11px] text-slate-500 font-normal">AI + Voice · Family Operating System</p>
+              <p className="text-[11px] text-slate-500 font-normal">Family Operating System</p>
             </div>
           </div>
           <button
@@ -252,22 +230,35 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       {msg.actionCards.map((card, i) => (
                         <div
                           key={i}
-                          className="p-2 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-2"
+                          className="p-2.5 rounded-xl bg-white border border-slate-200/90 flex items-center justify-between gap-2 shadow-xs"
                         >
-                          <span className="font-semibold text-[11px] text-slate-900 truncate">
-                            {card.title}
-                          </span>
+                          <div className="min-w-0 flex-1">
+                            {card.badge && (
+                              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 mr-1.5 inline-block">
+                                {card.badge}
+                              </span>
+                            )}
+                            <div className="font-semibold text-[11px] text-slate-900 truncate">
+                              {card.title}
+                            </div>
+                            {card.subtitle && (
+                              <div className="text-[10px] text-slate-500 truncate mt-0.5">
+                                {card.subtitle}
+                              </div>
+                            )}
+                          </div>
                           <button
                             onClick={() => {
                               onClose();
-                              if (card.type === 'vacation_preview') onNavigateTab('travel');
+                              if (card.tabTarget) onNavigateTab(card.tabTarget);
+                              else if (card.type === 'vacation_preview') onNavigateTab('travel');
                               else if (card.type === 'grocery_alert') onNavigateTab('shopping');
                               else if (card.type === 'service_booking') onNavigateTab('home');
                               else onNavigateTab('overview');
                             }}
-                            className="text-[10px] font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 flex-shrink-0"
+                            className="text-[10px] font-semibold text-white bg-slate-900 hover:bg-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1 flex-shrink-0 transition-colors shadow-xs"
                           >
-                            <span>Open</span>
+                            <span>{card.buttonLabel || 'Open'}</span>
                             <ChevronRight className="h-3 w-3" />
                           </button>
                         </div>
@@ -329,7 +320,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             </button>
           </form>
           <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 px-1">
-            <span>Encrypted with Mitchell family KMS</span>
+            <span>Local processing only · Fictional demo data</span>
             <span>Natural language queries</span>
           </div>
         </div>

@@ -1,0 +1,6 @@
+{
+  "name": "AlexaAude",
+  "description": "Your family's AI. Your life's operating system. AlexaAude understands your family's schedules, finances, home, shopping, travel and everyday responsibilities — then helps you plan, coordinate and act on what matters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

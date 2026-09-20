@@ -5,7 +5,7 @@
  * 1. Amazon DynamoDB (Single-table design: Family OS Entities)
  * 2. AWS Lambda (Microservices for grocery prediction, calendar conflict detection, expense ingestion)
  * 3. Amazon S3 (Encrypted Document Vault with KMS-SSE)
- * 4. Amazon Bedrock (Foundation Model agent reasoning via Claude 3.5 Sonnet / Titan)
+ * 4. Amazon Bedrock (Foundation Model reasoning via Claude 3.5 Sonnet / Titan)
  */
 
 export interface AwsCloudConfig {

@@ -141,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-700">
                     Live Context Synthesis Engine
                   </span>
-                  <AiInsightTag type="voice" label="VOICE + AMBIENT AI" />
+                  <AiInsightTag type="orchestrator" label="FAMILY INTELLIGENCE" />
                 </div>
                 <div className="text-xs font-mono text-slate-500">
                   7 Household Domains Connected in Real Time

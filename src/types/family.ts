@@ -303,14 +303,20 @@ export interface FamilyHouseholdProfile {
   disclaimerNote: string;
 }
 
+export type AiActionCard = {
+  type: 'finance_summary' | 'vacation_preview' | 'grocery_alert' | 'service_booking' | 'upcoming_bills' | 'responsibility_action' | 'entertainment_plan' | 'custom';
+  data?: any;
+  title: string;
+  subtitle?: string;
+  badge?: string;
+  buttonLabel?: string;
+  tabTarget?: string;
+};
+
 export interface AiMessage {
   id: string;
   sender: 'user' | 'assistant';
   timestamp: string;
   content: string;
-  actionCards?: {
-    type: 'finance_summary' | 'vacation_preview' | 'grocery_alert' | 'service_booking' | 'upcoming_bills';
-    data?: any;
-    title: string;
-  }[];
+  actionCards?: AiActionCard[];
 }
